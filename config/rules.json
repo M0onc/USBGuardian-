@@ -1,0 +1,66 @@
+{
+  "version": "1.2.0",
+  "rules": [
+    {
+      "id": "R001",
+      "name": "键盘宏注入攻击",
+      "type": "HID",
+      "conditions": [
+        {
+          "field": "hid.packet_size",
+          "operator": ">",
+          "value": 64,
+          "risk_level": "中危"
+        },
+        {
+          "field": "hid.input_rate",
+          "operator": ">",
+          "value": 30,
+          "risk_level": "高危"
+        }
+      ],
+      "description": "检测异常HID输入速率或超长数据包"
+    },
+    {
+      "id": "R002",
+      "name": "恶意存储设备伪装",
+      "type": "USB_MSC",
+      "conditions": [
+        {
+          "field": "device.vendor_id",
+          "operator": "not_in",
+          "value": ["0x0781", "0x090c"],
+          "risk_level": "低危"
+        },
+        {
+          "field": "storage.sector_size",
+          "operator": "!=",
+          "value": 512,
+          "risk_level": "中危"
+        }
+      ],
+      "description": "识别非授权厂商或异常存储参数设备"
+    },
+    {
+      "id": "R003",
+      "name": "网络适配器劫持",
+      "type": "CDC_ECM",
+      "conditions": [
+        {
+          "field": "network.mac",
+          "operator": "not_in_whitelist",
+          "value": "config/mac_whitelist.txt",
+          "risk_level": "高危"
+        }
+      ],
+      "description": "检测未注册的USB网卡设备"
+    }
+  ],
+  "dynamic_thresholds": {
+    "keyboard_input_rate": {
+      "baseline_mode": "adaptive",
+      "initial_value": 25,
+      "max_deviation": 0.3
+    }
+  }
+}

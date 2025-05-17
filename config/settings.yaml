@@ -1,0 +1,11 @@
+# 检测参数
+thresholds:
+  keyboard_input_rate: 30    
+  hid_packet_size: 64       
+# 路径配置
+paths:
+  rule_library: "config/rules.json"
+  log_file: "logs/detection.log"
+
+# 机器学习开关
+enable_ml: false             
